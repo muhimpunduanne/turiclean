@@ -1,0 +1,5 @@
+export enum ReportType {
+  FULL_BIN = 'FULL_BIN',
+  MISSED_PICKUP = 'MISSED_PICKUP',
+  URGENT_PICKUP = 'URGENT_PICKUP',
+}
