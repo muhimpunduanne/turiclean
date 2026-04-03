@@ -17,9 +17,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Exclude()
-  password: string;
+  password?: string;
 
   @Column()
   fullName: string;
@@ -32,7 +32,17 @@ export class User {
   role: Role;
 
   @Column({ nullable: true })
-  phone: string;
+  phone?: string;
+
+  @Column({ nullable: true })
+  @Exclude()
+  hashedRefreshToken?: string;
+
+  @Column({ default: 'local' })
+  provider: string;
+
+  @Column({ nullable: true, unique: true })
+  googleId?: string;
 
   @CreateDateColumn()
   createdAt: Date;
