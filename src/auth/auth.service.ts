@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
@@ -15,7 +19,11 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<{ user: Partial<User>; accessToken: string; refreshToken: string }> {
+  async register(registerDto: RegisterDto): Promise<{
+    user: Partial<User>;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
     const user = await this.usersService.create({
@@ -33,14 +41,20 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto): Promise<{ user: Partial<User>; accessToken: string; refreshToken: string }> {
+  async login(loginDto: LoginDto): Promise<{
+    user: Partial<User>;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const user = await this.usersService.findByEmail(loginDto.email);
 
     if (!user || user.provider !== 'local') {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = user.password ? await bcrypt.compare(loginDto.password, user.password) : false;
+    const isPasswordValid = user.password
+      ? await bcrypt.compare(loginDto.password, user.password)
+      : false;
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
@@ -65,7 +79,10 @@ export class AuthService {
       throw new ForbiddenException('Access Denied');
     }
 
-    const refreshTokenMatches = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
+    const refreshTokenMatches = await bcrypt.compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
     if (!refreshTokenMatches) {
       throw new ForbiddenException('Access Denied');
     }
@@ -76,7 +93,11 @@ export class AuthService {
     return tokens;
   }
 
-  async validateGoogleUser(profile: any): Promise<{ user: Partial<User>; accessToken: string; refreshToken: string }> {
+  async validateGoogleUser(profile: any): Promise<{
+    user: Partial<User>;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const { id, emails, displayName } = profile;
     const email = emails[0].value;
 
@@ -114,7 +135,9 @@ export class AuthService {
     await this.usersService.update(userId, { hashedRefreshToken });
   }
 
-  private async generateTokens(user: User): Promise<{ accessToken: string; refreshToken: string }> {
+  private async generateTokens(
+    user: User,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload = {
       sub: user.id,
       email: user.email,
@@ -123,11 +146,17 @@ export class AuthService {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_SECRET', 'turiclean-super-secret-key'),
+        secret: this.configService.get<string>(
+          'JWT_SECRET',
+          'turiclean-super-secret-key',
+        ),
         expiresIn: '15m',
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET', 'turiclean-refresh-secret-key'),
+        secret: this.configService.get<string>(
+          'JWT_REFRESH_SECRET',
+          'turiclean-refresh-secret-key',
+        ),
         expiresIn: '7d',
       }),
     ]);

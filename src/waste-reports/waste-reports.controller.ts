@@ -10,7 +10,13 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { WasteReportsService } from './waste-reports.service.js';
 import { CreateWasteReportDto } from './dto/create-waste-report.dto.js';
 import {
@@ -40,7 +46,9 @@ export class WasteReportsController {
 
   @Get()
   @Roles(Role.COMPANY, Role.ADMIN)
-  @ApiOperation({ summary: 'List all reports with optional filters (Company/Admin)' })
+  @ApiOperation({
+    summary: 'List all reports with optional filters (Company/Admin)',
+  })
   @ApiQuery({ name: 'status', enum: ReportStatus, required: false })
   @ApiQuery({ name: 'type', required: false })
   @ApiResponse({ status: 200, description: 'List of reports' })

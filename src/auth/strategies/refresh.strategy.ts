@@ -9,7 +9,10 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get<string>('JWT_REFRESH_SECRET', 'turiclean-refresh-secret-key'),
+      secretOrKey: configService.get<string>(
+        'JWT_REFRESH_SECRET',
+        'turiclean-refresh-secret-key',
+      ),
       passReqToCallback: true,
     });
   }

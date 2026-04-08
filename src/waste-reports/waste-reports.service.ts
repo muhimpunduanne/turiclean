@@ -16,7 +16,10 @@ export class WasteReportsService {
     private readonly reportsRepository: Repository<WasteReport>,
   ) {}
 
-  async create(createDto: CreateWasteReportDto, reporterId: string): Promise<WasteReport> {
+  async create(
+    createDto: CreateWasteReportDto,
+    reporterId: string,
+  ): Promise<WasteReport> {
     const report = this.reportsRepository.create({
       ...createDto,
       reporterId,
@@ -36,7 +39,9 @@ export class WasteReportsService {
       .orderBy('report.createdAt', 'DESC');
 
     if (filters?.status) {
-      queryBuilder.andWhere('report.status = :status', { status: filters.status });
+      queryBuilder.andWhere('report.status = :status', {
+        status: filters.status,
+      });
     }
     if (filters?.type) {
       queryBuilder.andWhere('report.type = :type', { type: filters.type });
@@ -104,9 +109,15 @@ export class WasteReportsService {
     const [total, pending, inProgress, resolved, rejected] = await Promise.all([
       this.reportsRepository.count(),
       this.reportsRepository.count({ where: { status: ReportStatus.PENDING } }),
-      this.reportsRepository.count({ where: { status: ReportStatus.IN_PROGRESS } }),
-      this.reportsRepository.count({ where: { status: ReportStatus.RESOLVED } }),
-      this.reportsRepository.count({ where: { status: ReportStatus.REJECTED } }),
+      this.reportsRepository.count({
+        where: { status: ReportStatus.IN_PROGRESS },
+      }),
+      this.reportsRepository.count({
+        where: { status: ReportStatus.RESOLVED },
+      }),
+      this.reportsRepository.count({
+        where: { status: ReportStatus.REJECTED },
+      }),
     ]);
 
     const byTypeRaw = await this.reportsRepository

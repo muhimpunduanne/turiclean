@@ -5,6 +5,9 @@ import { getDatabaseConfig } from './config/database.config.js';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { WasteReportsModule } from './waste-reports/waste-reports.module.js';
+import { NotificationsModule } from './notifications/notifications.module';
+import { TrucksModule } from './trucks/trucks.module';
+import { DashboardsModule } from './dashboards/dashboards.module';
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { WasteReportsModule } from './waste-reports/waste-reports.module.js';
     AuthModule,
     UsersModule,
     WasteReportsModule,
+    NotificationsModule,
+    TrucksModule,
+    DashboardsModule,
   ],
 })
 export class AppModule {}

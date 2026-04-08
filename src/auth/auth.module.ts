@@ -17,7 +17,10 @@ import { UsersModule } from '../users/users.module.js';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET', 'turiclean-super-secret-key'),
+        secret: configService.get<string>(
+          'JWT_SECRET',
+          'turiclean-super-secret-key',
+        ),
         signOptions: {
           expiresIn: configService.get<string>('JWT_EXPIRATION', '1d') as any,
         },
