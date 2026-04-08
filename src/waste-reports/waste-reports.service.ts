@@ -8,12 +8,15 @@ import { Repository } from 'typeorm';
 import { WasteReport } from './entities/waste-report.entity.js';
 import { CreateWasteReportDto } from './dto/create-waste-report.dto.js';
 import { ReportStatus } from '../common/enums/report-status.enum.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
+import { NotificationType } from '../notifications/entities/notification.entity.js';
 
 @Injectable()
 export class WasteReportsService {
   constructor(
     @InjectRepository(WasteReport)
     private readonly reportsRepository: Repository<WasteReport>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(
@@ -82,14 +85,33 @@ export class WasteReportsService {
       report.resolvedAt = new Date();
     }
 
-    return this.reportsRepository.save(report);
+    const savedReport = await this.reportsRepository.save(report);
+
+    // Notify the reporter about the status update
+    await this.notificationsService.createNotification(
+      report.reporterId,
+      `Your waste report status has been updated to ${status}.`,
+      NotificationType.REPORT_UPDATE,
+    );
+
+    return savedReport;
   }
 
   async assign(id: string, assignedToId: string): Promise<WasteReport> {
     const report = await this.findOne(id);
     report.assignedToId = assignedToId;
     report.status = ReportStatus.IN_PROGRESS;
-    return this.reportsRepository.save(report);
+
+    const savedReport = await this.reportsRepository.save(report);
+
+    // Notify the company assigned to the report
+    await this.notificationsService.createNotification(
+      assignedToId,
+      `You have been assigned to a new waste report.`,
+      NotificationType.REPORT_UPDATE,
+    );
+
+    return savedReport;
   }
 
   async remove(id: string): Promise<void> {
