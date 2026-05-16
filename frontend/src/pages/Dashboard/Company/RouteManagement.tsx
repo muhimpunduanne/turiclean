@@ -1,0 +1,30 @@
+import { Map, Route } from 'lucide-react';
+import DashboardLayout from '@/components/shared/DashboardLayout';
+import PageHeader from '@/components/data/PageHeader';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import SmartMap from '@/components/maps/SmartMap';
+import { mockTrucks } from '@/data/mockTrucks';
+import { useAuth } from '@/contexts/AuthContext';
+import { Badge } from '@/components/ui/badge';
+
+export default function RouteManagement() {
+  const { user } = useAuth();
+  const trucks = mockTrucks.filter((truck) => truck.companyId === user?.id);
+  return (
+    <DashboardLayout>
+      <PageHeader title="Route management" description="Optimize active routes, monitor ETAs, and balance driver workload." />
+      <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+        <Card><CardHeader><CardTitle>Route paths</CardTitle></CardHeader><CardContent><SmartMap trucks={trucks} showRoute height="480px" /></CardContent></Card>
+        <div className="space-y-4">
+          {trucks.map((truck) => (
+            <Card key={truck.id} className="p-4">
+              <div className="flex items-center justify-between gap-3"><p className="font-semibold text-white">{truck.currentRoute}</p><Badge tone="emerald">ETA {truck.speed ? Math.max(7, 38 - truck.speed) : 45}m</Badge></div>
+              <p className="mt-2 flex items-center gap-2 text-sm text-slate-400"><Route size={16} /> {truck.licensePlate} assigned to {truck.driverName}</p>
+            </Card>
+          ))}
+          <Card className="p-4 text-sm text-slate-400"><Map className="mb-3 text-sky-300" /> Smart route sequencing prioritizes urgent pickups, full bin clusters, and district service windows.</Card>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+}
