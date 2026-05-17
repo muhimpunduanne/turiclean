@@ -10,11 +10,11 @@ export function statusTone(status: string) {
 }
 
 export function humanize(value: string) {
-  return value.toLowerCase().replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return value.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, (letter: string) => letter.toUpperCase());
 }
 
 export function StatusBadge({ value }: { value: string }) {
-  return <Badge tone={statusTone(value)}>{humanize(value)}</Badge>;
+  return <Badge tone={statusTone(value)} dot>{humanize(value)}</Badge>;
 }
 
 export function reportTypeLabel(type: ReportType) {

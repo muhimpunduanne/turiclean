@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { User, Role, LoginCredentials, RegisterData, AuthResponse } from '@/types';
-import { mockUsers, mockPasswords } from '@/data/mockUsers';
-import { delay } from '@/lib/utils';
+import { User, Role, LoginCredentials, RegisterData } from '@/types';
+import { authApi } from '@/services/api';
 
 interface AuthContextType {
   user: User | null;
@@ -9,7 +8,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
+  setUser: (user: User) => void;
   isHousehold: boolean;
   isCompany: boolean;
   isAdmin: boolean;
@@ -21,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Rehydrate session on mount
   useEffect(() => {
     const stored = localStorage.getItem('user');
     const token = localStorage.getItem('accessToken');
@@ -36,65 +37,61 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     setIsLoading(true);
-    await delay(800);
-    const foundUser = mockUsers.find((u) => u.email === credentials.email);
-    if (!foundUser || mockPasswords[credentials.email] !== credentials.password) {
+    try {
+      const data = await authApi.login(credentials);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setUser(data.user as User);
+    } finally {
       setIsLoading(false);
-      throw new Error('Invalid email or password');
     }
-    const tokens = { accessToken: 'mock-access-' + Date.now(), refreshToken: 'mock-refresh-' + Date.now() };
-    localStorage.setItem('accessToken', tokens.accessToken);
-    localStorage.setItem('refreshToken', tokens.refreshToken);
-    localStorage.setItem('user', JSON.stringify(foundUser));
-    setUser(foundUser);
-    setIsLoading(false);
   }, []);
 
   const register = useCallback(async (data: RegisterData) => {
     setIsLoading(true);
-    await delay(1000);
-    if (mockUsers.find((u) => u.email === data.email)) {
+    try {
+      const response = await authApi.register(data);
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      setUser(response.user as User);
+    } finally {
       setIsLoading(false);
-      throw new Error('Email already exists');
     }
-    const newUser: User = {
-      id: 'usr-' + Date.now(),
-      email: data.email,
-      fullName: data.fullName,
-      role: data.role,
-      phone: data.phone,
-      provider: 'local',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    const tokens = { accessToken: 'mock-access-' + Date.now(), refreshToken: 'mock-refresh-' + Date.now() };
-    localStorage.setItem('accessToken', tokens.accessToken);
-    localStorage.setItem('refreshToken', tokens.refreshToken);
-    localStorage.setItem('user', JSON.stringify(newUser));
-    setUser(newUser);
-    setIsLoading(false);
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await authApi.logout();
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     setUser(null);
   }, []);
 
-  const value: AuthContextType = {
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    login,
-    register,
-    logout,
-    isHousehold: user?.role === Role.HOUSEHOLD,
-    isCompany: user?.role === Role.COMPANY,
-    isAdmin: user?.role === Role.ADMIN,
-  };
+  const updateUser = useCallback((updated: User) => {
+    setUser(updated);
+    localStorage.setItem('user', JSON.stringify(updated));
+  }, []);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        isLoading,
+        login,
+        register,
+        logout,
+        setUser: updateUser,
+        isHousehold: user?.role === Role.HOUSEHOLD,
+        isCompany: user?.role === Role.COMPANY,
+        isAdmin: user?.role === Role.ADMIN,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

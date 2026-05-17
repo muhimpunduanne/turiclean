@@ -37,6 +37,14 @@ export class UsersController {
     return this.usersService.findById(req.user.id);
   }
 
+  @Patch('me')
+  @ApiOperation({ summary: 'Update own profile (any authenticated user)' })
+  @ApiResponse({ status: 200, description: 'Profile updated' })
+  async updateProfile(@Request() req: any, @Body() updateData: Partial<any>) {
+    const { password, role, hashedRefreshToken, ...safe } = updateData;
+    return this.usersService.update(req.user.id, safe);
+  }
+
   @Get()
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'List all users (Admin only)' })

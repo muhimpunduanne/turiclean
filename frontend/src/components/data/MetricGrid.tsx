@@ -13,7 +13,7 @@ export interface Metric {
 export default function MetricGrid({ metrics }: { metrics: Metric[] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {metrics.map((metric) => <StatsCard key={metric.title} {...metric} />)}
+      {metrics.map((metric, i) => <StatsCard key={metric.title} index={i} {...metric} />)}
     </div>
   );
 }

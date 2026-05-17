@@ -31,6 +31,10 @@ export class TrucksService {
     return this.trucksRepository.find({ where: { companyId } });
   }
 
+  async findAllActive(): Promise<Truck[]> {
+    return this.trucksRepository.find({ where: { status: 'ACTIVE' as any } });
+  }
+
   async findOne(id: string): Promise<Truck> {
     const truck = await this.trucksRepository.findOne({ where: { id } });
     if (!truck) {

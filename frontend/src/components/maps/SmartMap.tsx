@@ -1,8 +1,17 @@
 import { MapContainer, Marker, Polyline, Popup, TileLayer, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
 import { Truck, WasteReport } from '@/types';
-import { kigaliRoutePoints } from '@/data/mockTrucks';
 import { reportTypeLabel } from '@/components/data/status';
+
+const kigaliRoutePoints = [
+  { lat: -1.9403, lng: 29.8739 }, { lat: -1.9440, lng: 29.8700 },
+  { lat: -1.9480, lng: 29.8650 }, { lat: -1.9520, lng: 29.8590 },
+  { lat: -1.9536, lng: 29.8468 }, { lat: -1.9500, lng: 29.8520 },
+  { lat: -1.9456, lng: 29.8623 }, { lat: -1.9401, lng: 29.8512 },
+  { lat: -1.9348, lng: 29.8701 }, { lat: -1.9380, lng: 29.8780 },
+  { lat: -1.9578, lng: 29.8562 }, { lat: -1.9612, lng: 29.8478 },
+  { lat: -1.9683, lng: 29.8345 }, { lat: -1.9720, lng: 29.8890 },
+];
 
 const truckIcon = L.divIcon({
   className: 'truck-marker',

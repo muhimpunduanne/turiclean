@@ -31,6 +31,12 @@ export class TrucksController {
     return this.trucksService.create(createTruckDto, req.user);
   }
 
+  @Get('active')
+  @ApiOperation({ summary: 'Get all active trucks (any authenticated user)' })
+  findAllActive() {
+    return this.trucksService.findAllActive();
+  }
+
   @Get()
   @Roles(Role.COMPANY)
   @ApiOperation({ summary: 'Get all trucks belonging to the current company' })

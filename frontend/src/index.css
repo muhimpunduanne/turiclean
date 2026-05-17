@@ -1,13 +1,9 @@
 @import "tailwindcss";
-
-/* Leaflet CSS */
 @import "leaflet/dist/leaflet.css";
 
-/* ============================================
-   TAILWIND v4 THEME TOKENS
-   ============================================ */
+/* ─── Theme Tokens ──────────────────────────────────────────────────────── */
 @theme {
-  --color-emerald-50: #ecfdf5;
+  --color-emerald-50:  #ecfdf5;
   --color-emerald-100: #d1fae5;
   --color-emerald-200: #a7f3d0;
   --color-emerald-300: #6ee7b7;
@@ -18,15 +14,16 @@
   --color-emerald-800: #065f46;
   --color-emerald-900: #064e3b;
 
-  --color-sky-50: #f0f9ff;
-  --color-sky-100: #e0f2fe;
-  --color-sky-200: #bae6fd;
   --color-sky-300: #7dd3fc;
   --color-sky-400: #38bdf8;
   --color-sky-500: #0ea5e9;
   --color-sky-600: #0284c7;
 
-  --color-slate-50: #f8fafc;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+
+  --color-slate-50:  #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
   --color-slate-300: #cbd5e1;
@@ -38,70 +35,49 @@
   --color-slate-900: #0f172a;
   --color-slate-950: #020617;
 
-  --color-dark-primary: #0a0e27;
-  --color-dark-secondary: #0f1336;
-  --color-dark-tertiary: #151a3d;
-  --color-dark-card: rgba(15, 19, 54, 0.7);
-  --color-dark-glass: rgba(255, 255, 255, 0.04);
-  --color-dark-glass-hover: rgba(255, 255, 255, 0.08);
-
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
-
-  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.15);
-  --shadow-glow-lg: 0 0 40px rgba(16, 185, 129, 0.2);
-
-  --animate-fade-in: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-slide-up: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-slide-down: slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-scale-in: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-spin: spin 1s linear infinite;
-  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
 }
 
+/* ─── Keyframes ─────────────────────────────────────────────────────────── */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
-
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
-
-@keyframes slide-down {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1);    }
 }
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
-  50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.3); }
+@keyframes pulse-slow {
+  0%,100% { opacity: 0.4; transform: scale(1);    }
+  50%      { opacity: 0.7; transform: scale(1.06); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0);   }
+  50%      { transform: translateY(-6px);}
+}
+@keyframes glow-pulse {
+  0%,100% { box-shadow: 0 0 20px rgba(16,185,129,0.15); }
+  50%      { box-shadow: 0 0 48px rgba(16,185,129,0.35); }
 }
 
-/* ============================================
-   GLOBAL RESET & BASE
-   ============================================ */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ─── Reset & Base ──────────────────────────────────────────────────────── */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 
 html {
   font-size: 16px;
@@ -115,191 +91,256 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
-}
-
-/* Dark mode (default) */
-body {
-  background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 1)),
-    #0a0e27;
+  background: #060a18;
   color: #f1f5f9;
 }
 
 body.light-mode {
-  background: #f8fafc;
+  background: #f0f4f8;
   color: #0f172a;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a  { color: inherit; text-decoration: none; }
+img{ max-width: 100%; display: block; }
+button { cursor: pointer; border: none; outline: none; font-family: inherit; font-size: inherit; }
+input, select, textarea { font-family: inherit; font-size: inherit; outline: none; border: none; }
+ul, ol { list-style: none; }
 
-img {
-  max-width: 100%;
-  display: block;
-}
+/* ─── Scrollbar ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 
-button {
-  cursor: pointer;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  font-size: inherit;
-}
-
-input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-  outline: none;
-  border: none;
-}
-
-ul, ol {
-  list-style: none;
-}
-
-/* ============================================
-   SCROLLBAR
-   ============================================ */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.light-mode ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-}
-.light-mode ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-/* ============================================
-   GLASS CARD
-   ============================================ */
-.glass-card {
-  background: #111827;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.18);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.glass-card:hover {
-  border-color: rgba(148, 163, 184, 0.24);
-  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.2);
-}
-
-.light-mode .glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(0, 0, 0, 0.08);
-}
-
-.light-mode .glass-card:hover {
-  border-color: rgba(0, 0, 0, 0.15);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-shell {
-  background:
-    linear-gradient(180deg, #0f172a 0%, #111827 100%);
-}
-
-.surface-panel {
-  background: rgba(15, 23, 42, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 8px;
-}
-
+/* ─── Focus Ring ────────────────────────────────────────────────────────── */
 .focus-ring:focus-visible {
-  outline: 2px solid rgba(52, 211, 153, 0.8);
+  outline: 2px solid rgba(52,211,153,0.75);
   outline-offset: 2px;
 }
 
-/* ============================================
-   LEAFLET OVERRIDES
-   ============================================ */
-.leaflet-container {
-  border-radius: 12px;
-  z-index: 1;
+/* ─── Dashboard Shell ───────────────────────────────────────────────────── */
+.dashboard-shell {
+  background: linear-gradient(160deg, #07091a 0%, #0c1024 50%, #070b1a 100%);
 }
 
-.leaflet-tile-pane {
-  filter: brightness(0.8) saturate(1.2);
+/* ─── Glass Cards ───────────────────────────────────────────────────────── */
+.glass-card {
+  background: linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(12,18,36,0.98) 100%);
+  border: 1px solid rgba(148,163,184,0.1);
+  border-radius: 14px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.04) inset,
+    0 8px 32px rgba(0,0,0,0.35);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.glass-card:hover {
+  border-color: rgba(148,163,184,0.18);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.06) inset,
+    0 12px 40px rgba(0,0,0,0.45);
 }
 
-.light-mode .leaflet-tile-pane {
-  filter: none;
+.light-mode .glass-card {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.07);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+}
+.light-mode .glass-card:hover {
+  border-color: rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.08);
 }
 
-.leaflet-popup-content-wrapper {
-  background: rgba(15, 19, 54, 0.95) !important;
-  color: #f1f5f9 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+/* ─── Surface Panel (sidebar bottom / user section) ────────────────────── */
+.surface-panel {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
 }
 
-.leaflet-popup-tip {
-  background: rgba(15, 19, 54, 0.95) !important;
+/* ─── Nav Active Indicator ──────────────────────────────────────────────── */
+.nav-item-active {
+  background: linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.08) 100%);
+  border: 1px solid rgba(16,185,129,0.25);
+  color: #6ee7b7;
 }
 
-.light-mode .leaflet-popup-content-wrapper {
-  background: #fff !important;
-  color: #0f172a !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
-}
-
-.light-mode .leaflet-popup-tip {
-  background: #fff !important;
-}
-
-/* ============================================
-   UTILITY CLASSES
-   ============================================ */
+/* ─── Gradient Text ─────────────────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #10b981, #06d6a0, #3b82f6);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 40%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gradient-border {
-  position: relative;
+.gradient-text-cool {
+  background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.gradient-border::before {
+/* ─── Hero Glow Orbs ────────────────────────────────────────────────────── */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: pulse-slow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+.glow-orb-emerald {
+  background: radial-gradient(circle, rgba(16,185,129,0.22) 0%, transparent 70%);
+}
+.glow-orb-blue {
+  background: radial-gradient(circle, rgba(14,165,233,0.18) 0%, transparent 70%);
+}
+.glow-orb-purple {
+  background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%);
+  animation-delay: 2s;
+}
+
+/* ─── Shimmer Loading Skeleton ──────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 8px;
+}
+
+/* ─── Stat Card Border Gradient ─────────────────────────────────────────── */
+.card-border-emerald { border-top: 2px solid #10b981; }
+.card-border-blue    { border-top: 2px solid #0ea5e9; }
+.card-border-amber   { border-top: 2px solid #f59e0b; }
+.card-border-purple  { border-top: 2px solid #8b5cf6; }
+.card-border-red     { border-top: 2px solid #ef4444; }
+
+/* ─── Stagger Animation ─────────────────────────────────────────────────── */
+.stagger > *:nth-child(1) { animation: fade-in 0.4s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
+.stagger > *:nth-child(2) { animation: fade-in 0.4s 0.10s cubic-bezier(0.16,1,0.3,1) both; }
+.stagger > *:nth-child(3) { animation: fade-in 0.4s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+.stagger > *:nth-child(4) { animation: fade-in 0.4s 0.20s cubic-bezier(0.16,1,0.3,1) both; }
+.stagger > *:nth-child(5) { animation: fade-in 0.4s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
+.stagger > *:nth-child(6) { animation: fade-in 0.4s 0.30s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ─── Noise Texture Overlay ─────────────────────────────────────────────── */
+.noise-overlay::before {
   content: '';
   position: absolute;
   inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.35;
   border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, #10b981, #3b82f6);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
 }
 
-/* ============================================
-   STAGGER ANIMATION CHILDREN
-   ============================================ */
-.stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger > *:nth-child(2) { animation-delay: 0.1s; }
-.stagger > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger > *:nth-child(4) { animation-delay: 0.2s; }
-.stagger > *:nth-child(5) { animation-delay: 0.25s; }
-.stagger > *:nth-child(6) { animation-delay: 0.3s; }
-.stagger > *:nth-child(7) { animation-delay: 0.35s; }
-.stagger > *:nth-child(8) { animation-delay: 0.4s; }
+/* ─── Pill Tag ──────────────────────────────────────────────────────────── */
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid rgba(16,185,129,0.3);
+  background: rgba(16,185,129,0.08);
+  color: #34d399;
+}
+
+/* ─── Grid Dot Background ───────────────────────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(rgba(148,163,184,0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── Enterprise section label ──────────────────────────────────────────── */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #34d399;
+}
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 28px;
+  background: rgba(52,211,153,0.4);
+}
+
+/* ─── Chart container (consistent padding + min-height) ─────────────────── */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+}
+
+/* ─── Empty state box ───────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  color: #64748b;
+}
+.empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: #475569;
+}
+
+/* ─── Info row (key: value pair inside cards) ───────────────────────────── */
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-row dt { color: #64748b; }
+.info-row dd { color: #e2e8f0; font-weight: 600; }
+
+/* ─── Leaflet Overrides ─────────────────────────────────────────────────── */
+.leaflet-container { border-radius: 12px; z-index: 1; }
+.leaflet-tile-pane { filter: brightness(0.75) saturate(1.1) hue-rotate(5deg); }
+.light-mode .leaflet-tile-pane { filter: none; }
+
+.leaflet-popup-content-wrapper {
+  background: rgba(7,9,26,0.97) !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.leaflet-popup-tip { background: rgba(7,9,26,0.97) !important; }
+
+.light-mode .leaflet-popup-content-wrapper {
+  background: #fff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+.light-mode .leaflet-popup-tip { background: #fff !important; }
